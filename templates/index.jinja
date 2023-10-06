@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+
+    <!-- Enlaza el archivo CSS compilado de Tailwind CSS -->
+    <link href="{{ url_for('static', filename='css/tailwind.css') }}" rel="stylesheet">
+
+    <title>Hoja de Cálculo de Google</title>
+</head>
+<body>
+    <div class=" w-max-full  bg-blue-800">
+        <h1 class="text-4xl font-bold text-center py-6 text-white">TECNICAL TEST OF NEST AI</h1>
+        <div class="overflow-x-auto">
+            <table  id="datatable" class="mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-600 uppercase">ID</th>
+                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-600 uppercase">Nombre</th>
+                        <th class="px-3 py-1 text-left text-xs font-medium text-gray-600 uppercase">Edad</th>
+                        <th class="px-8 py-1 text-left text-xs font-medium text-gray-600 uppercase">Profesión</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr>
+                        <td class="px-3 py-2">{{ row["ID"] }}</td>
+                        <td class="px-3 py-2">{{ row["Nombre"] }}</td>
+                        <td class="px-3 py-2">{{ row["Edad"] }}</td>
+                        <td class="px-3 py-2">{{ row["Profesión"] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Botón para actualizar la tabla -->
+        <button id="actualizar-btn" class="mt-6 mx-auto bg-sky-500 hover:bg-sky-700 text-white py-2 px-4 rounded-lg transition duration-300 ease-in-out block">Actualizar Datos</button>  </div>
+
+    <script>
+        // Función para cargar los datos desde el servidor y actualizar la tabla
+        function actualizarTabla() {
+            fetch('/obtener_datos')
+                .then(response => response.json())
+                .then(data => {
+                    const table = document.getElementById('datatable');
+                    table.innerHTML = '<tr><th>ID</th><th>Nombre</th><th>Edad</th><th>Profesión</th></tr>';
+                    data.forEach(row => {
+                        table.innerHTML += `
+                            <tr>
+                                <td>${row["ID"]}</td>
+                                <td>${row["Nombre"]}</td>
+                                <td>${row["Edad"]}</td>
+                                <td>${row["Profesión"]}</td>
+                            </tr>
+                        `;
+                    });
+                });
+        }
+        // Agregar un evento de clic al botón "Actualizar Datos"
+        document.getElementById('actualizar-btn').addEventListener('click', actualizarTabla);
+    </script>
+</body>
+</html>
